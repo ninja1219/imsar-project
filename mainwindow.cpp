@@ -18,9 +18,13 @@ void Worker::startTimer()
     {
         timer = new QTimer;
         connect(timer, &QTimer::timeout, this, &Worker::onTimeout);
+        elapsed = 0;
     }
-    elapsed = 0;
-    timer->start(1000);
+    else
+    {
+        elapsed = 0;
+        timer->start(1000);
+    }
 }
 
 void Worker::stopTimer()
@@ -81,5 +85,14 @@ void MainWindow::on_button_clicked()
 
 void MainWindow::updateUI(QString time)
 {
-    ui->time->setText("Time: " + time);
+    int numSecs = time.toInt();
+    int numHours = numSecs / 3600;
+    numSecs -= (numHours * 3600);
+    int numMins = numSecs / 60;
+    numSecs -= (numMins * 60);
+    QString formattedTime = QString("%1").arg(numHours, 2, 10, QChar('0')) + ":"
+                            + QString("%1").arg(numMins, 2, 10, QChar('0')) + ":"
+                            + QString("%1").arg(numSecs, 2, 10, QChar('0'));
+
+    ui->time->setText("Time: " + formattedTime);
 }
